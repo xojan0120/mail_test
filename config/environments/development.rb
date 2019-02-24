@@ -27,7 +27,34 @@ Rails.application.configure do
   end
 
   # Don't care if the mailer can't send.
-  config.action_mailer.raise_delivery_errors = false
+  
+  # --------------------------------------------------------------------
+  # 実際にメール送信せず、プレビューのみとする場合 BEGIN
+  # --------------------------------------------------------------------
+  #config.action_mailer.raise_delivery_errors = true
+  #config.action_mailer.delivery_method = :test
+  #host = '192.168.33.10:3000'
+  #config.action_mailer.default_url_options = { host: host, protocol: 'http' }
+  # --------------------------------------------------------------------
+  # 実際にメール送信せず、プレビューのみとする場合 END
+  # --------------------------------------------------------------------
+
+  # --------------------------------------------------------------------
+  # 実際にメール送信する場合(Gmail経由) BEGIN
+  # --------------------------------------------------------------------
+  config.action_mailer.delivery_method = :smtp
+  ActionMailer::Base.smtp_settings = {
+    :address              => 'smtp.gmail.com',
+    :port                 => '587',
+    :authentication       => :plain,
+    :user_name            => ENV['SMTP_USERNAME'],
+    :password             => ENV['SMTP_PASSWORD'],
+    :domain               => 'smtp.gmail.com',
+    :enable_starttls_auto => true
+  }
+  # --------------------------------------------------------------------
+  # 実際にメール送信する場合(Gmail経由) END
+  # --------------------------------------------------------------------
 
   config.action_mailer.perform_caching = false
 
